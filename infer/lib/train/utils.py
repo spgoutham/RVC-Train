@@ -59,7 +59,7 @@ def load_checkpoint_d(checkpoint_path, combd, sbd, optimizer=None, load_opt=1):
     learning_rate = checkpoint_dict["learning_rate"]
     if (
         optimizer is not None and load_opt == 1
-    ):  ###加载不了，如果是空的的话，重新初始化，可能还会影响lr时间表的更新，因此在train文件最外围catch
+    ):  
         #   try:
         optimizer.load_state_dict(checkpoint_dict["optimizer"])
     #   except:
@@ -107,7 +107,7 @@ def load_checkpoint(checkpoint_path, model, optimizer=None, load_opt=1):
     else:
         state_dict = model.state_dict()
     new_state_dict = {}
-    for k, v in state_dict.items():  # 模型需要的shape
+    for k, v in state_dict.items():  
         try:
             new_state_dict[k] = saved_state_dict[k]
             if saved_state_dict[k].shape != state_dict[k].shape:
@@ -132,7 +132,7 @@ def load_checkpoint(checkpoint_path, model, optimizer=None, load_opt=1):
     learning_rate = checkpoint_dict["learning_rate"]
     if (
         optimizer is not None and load_opt == 1
-    ):  ###加载不了，如果是空的的话，重新初始化，可能还会影响lr时间表的更新，因此在train文件最外围catch
+    ): 
         #   try:
         optimizer.load_state_dict(checkpoint_dict["optimizer"])
     #   except:
