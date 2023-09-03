@@ -2,7 +2,7 @@
 
 FROM python:3.10-bullseye
 
-EXPOSE 7865
+EXPOSE 8080
 
 WORKDIR /app
 
