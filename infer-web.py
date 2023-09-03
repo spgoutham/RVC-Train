@@ -1016,8 +1016,6 @@ with gr.Blocks(title="RVC WebUI") as app:
                         api_name="train_start_all",
                     )
 
-
-
     if config.iscolab:
         app.queue(concurrency_count=511, max_size=1022).launch(share=True)
     else:
