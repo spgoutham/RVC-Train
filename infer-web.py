@@ -716,7 +716,7 @@ def train1key(
 
     ####### step3a:训练模型
     yield get_info_str(i18n("step3a:正在训练模型"))
-    click_train(
+    model_path = click_train(
         exp_dir1,
         sr2,
         if_f0_3,
@@ -732,6 +732,12 @@ def train1key(
         if_save_every_weights18,
         version19,
     )
+
+    # Save the trained model to the log folder
+    model_filename = os.path.basename(model_path)
+    model_save_path = os.path.join(exp_dir1, "itrained", model_filename)
+    os.rename(model_path, model_save_path)  # Move the model to the desired location
+
     yield get_info_str(i18n("训练结束, 您可查看控制台训练日志或实验文件夹下的train.log"))
 
     ####### step3b:训练索引
