@@ -63,7 +63,7 @@ if config.dml == True:
     fairseq.modules.grad_multiply.GradMultiply.forward = forward_dml
 i18n = I18nAuto()
 logger.info(i18n)
-# 判断是否有能用来训练和加速推理的N卡
+# Determine whether there is an N card that can be used to train and accelerate inference
 ngpu = torch.cuda.device_count()
 gpu_infos = []
 mem = []
@@ -96,7 +96,7 @@ if torch.cuda.is_available() or ngpu != 0:
             ]
         ):
             # A10#A100#V100#A40#P40#M40#K80#A4500
-            if_gpu_ok = True  # 至少有一张能用的N卡
+            if_gpu_ok = True  # At least one N card can be used
             gpu_infos.append("%s\t%s" % (i, gpu_name))
             mem.append(
                 int(
@@ -111,7 +111,7 @@ if if_gpu_ok and len(gpu_infos) > 0:
     gpu_info = "\n".join(gpu_infos)
     default_batch_size = min(mem) // 2
 else:
-    gpu_info = i18n("很遗憾您这没有能用的显卡来支持您训练")
+    gpu_info = i18n("It's a pity that you don't have a working graphics card to support your training. It's a pity that you don't have a working graphics card to support your training.")
     default_batch_size = 1
 gpus = "-".join([i[0] for i in gpu_infos])
 
@@ -189,8 +189,8 @@ def if_done(done, p):
 
 def if_done_multi(done, ps):
     while 1:
-        # poll==None代表进程未结束
-        # 只要有一个进程未结束都不停
+        # poll==None means the process is not over
+        # As long as there is a process that has not ended, it will not stop
         flag = 1
         for p in ps:
             if p.poll() is None:
@@ -219,8 +219,8 @@ def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
         per,
     )
     logger.info(cmd)
-    p = Popen(cmd, shell=True)  # , stdin=PIPE, stdout=PIPE,stderr=PIPE,cwd=now_dir
-    ###煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
+    p = Popen(cmd, shell=True)# , stdin=PIPE, stdout=PIPE,stderr=PIPE,cwd=now_dir
+    ### Both gr and popen read have to be run completely and then read in one go. Without gr, you can read and output one sentence normally; you can only create an additional text stream for regular reading.
     done = [False]
     threading.Thread(
         target=if_done,
@@ -263,7 +263,7 @@ def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version19, gpus_rmvp
             p = Popen(
                 cmd, shell=True, cwd=now_dir
             )  # , stdin=PIPE, stdout=PIPE,stderr=PIPE
-            ###煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
+            ### Both gr and popen read have to be run completely and then read in one go. Without gr, you can read and output one sentence normally; you can only create an additional text stream for regular reading.
             done = [False]
             threading.Thread(
                 target=if_done,
@@ -293,9 +293,9 @@ def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version19, gpus_rmvp
                     logger.info(cmd)
                     p = Popen(
                         cmd, shell=True, cwd=now_dir
-                    )  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
+                    ) # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
                     ps.append(p)
-                ###煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
+                ### Both gr and popen read have to be run completely and then read in one go. Without gr, you can read and output one sentence normally; you can only create an additional text stream for regular reading.
                 done = [False]
                 threading.Thread(
                     target=if_done_multi,  #
@@ -331,7 +331,7 @@ def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version19, gpus_rmvp
             log = f.read()
         logger.info(log)
         yield log
-    ####对不同part分别开多进程
+    #### Open multiple processes for different parts
     """
     n_part=int(sys.argv[1])
     i_part=int(sys.argv[2])
@@ -360,7 +360,7 @@ def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version19, gpus_rmvp
             cmd, shell=True, cwd=now_dir
         )  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
         ps.append(p)
-    ###煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
+    ###Shabi gr, popen read all have to finish running and then read at one time, without using gr to read a sentence and output a sentence normally; only an additional text stream can be read regularly
     done = [False]
     threading.Thread(
         target=if_done_multi,
@@ -459,7 +459,7 @@ def click_train(
     if_save_every_weights18,
     version19,
 ):
-    # 生成filelist
+    # generate filelist
     exp_dir = "%s/logs/%s" % (now_dir, exp_dir1)
     os.makedirs(exp_dir, exist_ok=True)
     gt_wavs_dir = "%s/0_gt_wavs" % (exp_dir)
@@ -562,9 +562,9 @@ def click_train(
                 save_epoch10,
                 "-pg %s" % pretrained_G14 if pretrained_G14 != "" else "",
                 "-pd %s" % pretrained_D15 if pretrained_D15 != "" else "",
-                1 if if_save_latest13 == i18n("是") else 0,
-                1 if if_cache_gpu17 == i18n("是") else 0,
-                1 if if_save_every_weights18 == i18n("是") else 0,
+                1 if if_save_latest13 == i18n("Yes") else 0,
+                1 if if_cache_gpu17 == i18n("Yes") else 0,
+                1 if if_save_every_weights18 == i18n("Yes") else 0,
                 version19,
             )
         )
@@ -581,16 +581,16 @@ def click_train(
                 save_epoch10,
                 "-pg %s" % pretrained_G14 if pretrained_G14 != "" else "",
                 "-pd %s" % pretrained_D15 if pretrained_D15 != "" else "",
-                1 if if_save_latest13 == i18n("是") else 0,
-                1 if if_cache_gpu17 == i18n("是") else 0,
-                1 if if_save_every_weights18 == i18n("是") else 0,
+                1 if if_save_latest13 == i18n("Yes") else 0,
+                1 if if_cache_gpu17 == i18n("Yes") else 0,
+                1 if if_save_every_weights18 == i18n("Yes") else 0,
                 version19,
             )
         )
     logger.info(cmd)
     p = Popen(cmd, shell=True, cwd=now_dir)
     p.wait()
-    return "训练结束, 您可查看控制台训练日志或实验文件夹下的train.log"
+    return "After the training is completed, you can view the console training log or train.log under the experiment folder"
 
 
 # but4.click(train_index, [exp_dir1], info3)
@@ -604,10 +604,10 @@ def train_index(exp_dir1, version19):
         else "%s/3_feature768" % (exp_dir)
     )
     if not os.path.exists(feature_dir):
-        return "请先进行特征提取!"
+        return "Please perform feature extraction first!"
     listdir_res = list(os.listdir(feature_dir))
     if len(listdir_res) == 0:
-        return "请先进行特征提取！"
+        return "Please perform feature extraction first!"
     infos = []
     npys = []
     for name in sorted(listdir_res):
@@ -670,7 +670,7 @@ def train_index(exp_dir1, version19):
         % (n_ivf, index_ivf.nprobe, exp_dir1, version19)
     )
     # faiss.write_index(index, '%s/added_IVF%s_Flat_FastScan_%s.index'%(exp_dir,n_ivf,version19))
-    # infos.append("成功构建索引，added_IVF%s_Flat_FastScan_%s.index"%(n_ivf,version19))
+    # infos.append("Successfully built index，added_IVF%s_Flat_FastScan_%s.index"%(n_ivf,version19))
     yield "\n".join(infos)
 
 
@@ -702,11 +702,11 @@ def train1key(
         return "\n".join(infos)
 
     ####### step1:处理数据
-    yield get_info_str(i18n("step1:正在处理数据"))
+    yield get_info_str(i18n("Step 1:Processing data"))
     [get_info_str(_) for _ in preprocess_dataset(trainset_dir4, exp_dir1, sr2, np7)]
 
     ####### step2a:提取音高
-    yield get_info_str(i18n("step2:正在提取音高&正在提取特征"))
+    yield get_info_str(i18n("Step 2:Extracting pitch & extracting features"))
     [
         get_info_str(_)
         for _ in extract_f0_feature(
@@ -715,7 +715,7 @@ def train1key(
     ]
 
     ####### step3a:训练模型
-    yield get_info_str(i18n("step3a:正在训练模型"))
+    yield get_info_str(i18n("Step 3a:Training model"))
     model_path = click_train(
         exp_dir1,
         sr2,
@@ -738,11 +738,11 @@ def train1key(
     model_save_path = os.path.join(exp_dir1, "itrained", model_filename)
     os.rename(model_path, model_save_path)  # Move the model to the desired location
 
-    yield get_info_str(i18n("训练结束, 您可查看控制台训练日志或实验文件夹下的train.log"))
+    yield get_info_str(i18n("After the training is completed, you can view the console training log or train.log under the experiment folder"))
 
     ####### step3b:训练索引
     [get_info_str(_) for _ in train_index(exp_dir1, version19)]
-    yield get_info_str(i18n("全流程结束！"))
+    yield get_info_str(i18n("The whole process is over!"))
 
 
 #                    ckpt_path2.change(change_info_,[ckpt_path2],[sr__,if_f0__])
@@ -776,32 +776,32 @@ def change_f0_method(f0method8):
 with gr.Blocks(title="RVC WebUI") as app:
     gr.Markdown(
         value=i18n(
-            "本软件以MIT协议开源, 作者不对软件具备任何控制力, 使用软件者、传播软件导出的声音者自负全责. <br>如不认可该条款, 则不能使用或引用软件包内任何代码和文件. 详见根目录<b>LICENSE</b>."
+            "This software is open source under the MIT license. The author does not have any control over the software. Those who use the software and disseminate the sounds exported by the software are fully responsible. <br>If you do not agree with this term, you cannot use or quote any code and files in the software package. . See root directory <b>LICENSE</b> for details."
         )
     )
     with gr.Tabs():
-        with gr.TabItem(i18n("训练")):
+        with gr.TabItem(i18n("train")):
             gr.Markdown(
                 value=i18n(
-                    "step1: 填写实验配置. 实验数据放在logs下, 每个实验一个文件夹, 需手工输入实验名路径, 内含实验配置, 日志, 训练得到的模型文件. "
+                    "Step 1: Fill in the experimental configuration. The experimental data is placed under logs. Each experiment has a folder. You need to manually enter the experimental name path, which contains the experimental configuration, logs, and model files obtained by training. "
                 )
             )
             with gr.Row():
-                exp_dir1 = gr.Textbox(label=i18n("输入实验名"), value="mi-test")
+                exp_dir1 = gr.Textbox(label=i18n("Enter experiment name"), value="model-name")
                 sr2 = gr.Radio(
-                    label=i18n("目标采样率"),
+                    label=i18n("target sampling rate"),
                     choices=["40k", "48k"],
                     value="40k",
                     interactive=True,
                 )
                 if_f0_3 = gr.Radio(
-                    label=i18n("模型是否带音高指导(唱歌一定要, 语音可以不要)"),
+                    label=i18n("Does the model Yes have pitch guidance (singing must, voice can not)"),
                     choices=[True, False],
                     value=True,
                     interactive=True,
                 )
                 version19 = gr.Radio(
-                    label=i18n("版本"),
+                    label=i18n("Version"),
                     choices=["v1", "v2"],
                     value="v2",
                     interactive=True,
@@ -811,30 +811,30 @@ with gr.Blocks(title="RVC WebUI") as app:
                     minimum=0,
                     maximum=config.n_cpu,
                     step=1,
-                    label=i18n("提取音高和处理数据使用的CPU进程数"),
+                    label=i18n("Number of CPU processes used to extract pitch and process data"),
                     value=int(np.ceil(config.n_cpu / 1.5)),
                     interactive=True,
                 )
-            with gr.Group():  # 暂时单人的, 后面支持最多4人的#数据处理
+            with gr.Group():  # Temporarily single, later support up to 4 people #data processing
                 gr.Markdown(
                     value=i18n(
-                        "step2a: 自动遍历训练文件夹下所有可解码成音频的文件并进行切片归一化, 在实验目录下生成2个wav文件夹; 暂时只支持单人训练. "
+                        "Step 2a: Automatically traverse all files in the training folder that can be decoded into audio and perform slice normalization, and generate 2 wav folders in the experimental directory; currently only single-person training is supported. "
                     )
                 )
                 with gr.Row():
                     trainset_dir4 = gr.Textbox(
-                        label=i18n("输入训练文件夹路径"), value="E:\\语音音频+标注\\米津玄师\\src"
+                        label=i18n("Enter the training folder path"), value="E:\\Voice Audio+Mark\\Dhanush Sample\\src"
                     )
                     spk_id5 = gr.Slider(
                         minimum=0,
                         maximum=4,
                         step=1,
-                        label=i18n("请指定说话人id"),
+                        label=i18n("Please specify speaker id"),
                         value=0,
                         interactive=True,
                     )
-                    but1 = gr.Button(i18n("处理数据"), variant="primary")
-                    info1 = gr.Textbox(label=i18n("输出信息"), value="")
+                    but1 = gr.Button(i18n("Process data"), variant="primary")
+                    info1 = gr.Textbox(label=i18n("Output information"), value="")
                     but1.click(
                         preprocess_dataset,
                         [trainset_dir4, exp_dir1, sr2, np7],
@@ -842,22 +842,22 @@ with gr.Blocks(title="RVC WebUI") as app:
                         api_name="train_preprocess",
                     )
             with gr.Group():
-                gr.Markdown(value=i18n("step2b: 使用CPU提取音高(如果模型带音高), 使用GPU提取特征(选择卡号)"))
+                gr.Markdown(value=i18n("Step 2b: Use CPU to extract pitch (if the model has pitch), use GPU to extract features (select card number)"))
                 with gr.Row():
                     with gr.Column():
                         gpus6 = gr.Textbox(
-                            label=i18n("以-分隔输入使用的卡号, 例如   0-1-2   使用卡0和卡1和卡2"),
+                            label=i18n("Enter the card numbers used separated by -, for example 0-1-2 uses card 0 and card 1 and card 2"),
                             value=gpus,
                             interactive=True,
                             visible=F0GPUVisible,
                         )
                         gpu_info9 = gr.Textbox(
-                            label=i18n("显卡信息"), value=gpu_info, visible=F0GPUVisible
+                            label=i18n("Graphics card information"), value=gpu_info, visible=F0GPUVisible
                         )
                     with gr.Column():
                         f0method8 = gr.Radio(
                             label=i18n(
-                                "选择音高提取算法:输入歌声可用pm提速,高质量语音但CPU差可用dio提速,harvest质量更好但慢,rmvpe效果最好且微吃CPU/GPU"
+                                "Select the pitch extraction algorithm: when inputting singing, you can use pm to speed up, for high-quality speech but poor CPU, you can use dio to speed up, harvest has better quality but is slower, rmvpe has the best effect and consumes less CPU/GPU."
                             ),
                             choices=["pm", "harvest", "dio", "rmvpe", "rmvpe_gpu"],
                             value="rmvpe_gpu",
@@ -865,14 +865,14 @@ with gr.Blocks(title="RVC WebUI") as app:
                         )
                         gpus_rmvpe = gr.Textbox(
                             label=i18n(
-                                "rmvpe卡号配置：以-分隔输入使用的不同进程卡号,例如0-0-1使用在卡0上跑2个进程并在卡1上跑1个进程"
+                                "Rmvpe card number configuration: Use - to separate the different process card numbers used. For example, 0-0-1 is used to run 2 processes on card 0 and run 1 process on card 1."
                             ),
                             value="%s-%s" % (gpus, gpus),
                             interactive=True,
                             visible=F0GPUVisible,
                         )
-                    but2 = gr.Button(i18n("特征提取"), variant="primary")
-                    info2 = gr.Textbox(label=i18n("输出信息"), value="", max_lines=8)
+                    but2 = gr.Button(i18n("Feature extraction"), variant="primary")
+                    info2 = gr.Textbox(label=i18n("Output information"), value="", max_lines=8)
                     f0method8.change(
                         fn=change_f0_method,
                         inputs=[f0method8],
@@ -893,13 +893,13 @@ with gr.Blocks(title="RVC WebUI") as app:
                         api_name="train_extract_f0_feature",
                     )
             with gr.Group():
-                gr.Markdown(value=i18n("step3: 填写训练设置, 开始训练模型和索引"))
+                gr.Markdown(value=i18n("Step 3: Fill in the training settings and start training the model and index"))
                 with gr.Row():
                     save_epoch10 = gr.Slider(
                         minimum=1,
                         maximum=50,
                         step=1,
-                        label=i18n("保存频率save_every_epoch"),
+                        label=i18n("Save frequency save_every_epoch"),
                         value=5,
                         interactive=True,
                     )
@@ -907,7 +907,7 @@ with gr.Blocks(title="RVC WebUI") as app:
                         minimum=2,
                         maximum=1000,
                         step=1,
-                        label=i18n("总训练轮数total_epoch"),
+                        label=i18n("total number of training rounds total_epoch"),
                         value=20,
                         interactive=True,
                     )
@@ -915,38 +915,38 @@ with gr.Blocks(title="RVC WebUI") as app:
                         minimum=1,
                         maximum=40,
                         step=1,
-                        label=i18n("每张显卡的batch_size"),
+                        label=i18n("batch_size for each graphics card"),
                         value=default_batch_size,
                         interactive=True,
                     )
                     if_save_latest13 = gr.Radio(
-                        label=i18n("是否仅保存最新的ckpt文件以节省硬盘空间"),
-                        choices=[i18n("是"), i18n("否")],
-                        value=i18n("否"),
+                        label=i18n("Only save the latest ckpt file to save hard drive space"),
+                        choices=[i18n("Yes"), i18n("No")],
+                        value=i18n("No"),
                         interactive=True,
                     )
                     if_cache_gpu17 = gr.Radio(
                         label=i18n(
-                            "是否缓存所有训练集至显存. 10min以下小数据可缓存以加速训练, 大数据缓存会炸显存也加不了多少速"
+                            "Whether to cache all training sets to video memory. Small data under 10 minutes can be cached to speed up training, and large data cache will blow up video memory and not increase the speed much."
                         ),
-                        choices=[i18n("是"), i18n("否")],
-                        value=i18n("否"),
+                        choices=[i18n("Yes"), i18n("No")],
+                        value=i18n("No"),
                         interactive=True,
                     )
                     if_save_every_weights18 = gr.Radio(
-                        label=i18n("是否在每次保存时间点将最终小模型保存至weights文件夹"),
-                        choices=[i18n("是"), i18n("否")],
-                        value=i18n("否"),
+                        label=i18n("Save the final small model to the weights folder at each save time point"),
+                        choices=[i18n("Yes"), i18n("No")],
+                        value=i18n("No"),
                         interactive=True,
                     )
                 with gr.Row():
                     pretrained_G14 = gr.Textbox(
-                        label=i18n("加载预训练底模G路径"),
+                        label=i18n("Load the pre-trained bottom model G path"),
                         value="assets/pretrained_v2/f0G40k.pth",
                         interactive=True,
                     )
                     pretrained_D15 = gr.Textbox(
-                        label=i18n("加载预训练底模D路径"),
+                        label=i18n("Load pre-trained base model D path"),
                         value="assets/pretrained_v2/f0D40k.pth",
                         interactive=True,
                     )
@@ -966,14 +966,14 @@ with gr.Blocks(title="RVC WebUI") as app:
                         [f0method8, pretrained_G14, pretrained_D15],
                     )
                     gpus16 = gr.Textbox(
-                        label=i18n("以-分隔输入使用的卡号, 例如   0-1-2   使用卡0和卡1和卡2"),
+                        label=i18n("Enter the card numbers used separated by -, e.g. 0-1-2 use card 0 and card 1 and card 2"),
                         value=gpus,
                         interactive=True,
                     )
-                    but3 = gr.Button(i18n("训练模型"), variant="primary")
-                    but4 = gr.Button(i18n("训练特征索引"), variant="primary")
-                    but5 = gr.Button(i18n("一键训练"), variant="primary")
-                    info3 = gr.Textbox(label=i18n("输出信息"), value="", max_lines=10)
+                    but3 = gr.Button(i18n("training model"), variant="primary")
+                    but4 = gr.Button(i18n("Training Feature Index"), variant="primary")
+                    but5 = gr.Button(i18n("One-click training"), variant="primary")
+                    info3 = gr.Textbox(label=i18n("Output information"), value="", max_lines=10)
                     but3.click(
                         click_train,
                         [

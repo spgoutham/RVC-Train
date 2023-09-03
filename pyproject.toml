@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "rvc-beta"
+name = "rvc-train"
 version = "0.1.0"
 description = ""
-authors = ["lj1995"]
+authors = ["goutham"]
 license = "MIT"
 
 [tool.poetry.dependencies]
