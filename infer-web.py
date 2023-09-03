@@ -111,7 +111,7 @@ if if_gpu_ok and len(gpu_infos) > 0:
     gpu_info = "\n".join(gpu_infos)
     default_batch_size = min(mem) // 2
 else:
-    gpu_info = i18n("It's a pity that you don't have a working graphics card to support your training. It's a pity that you don't have a working graphics card to support your training.")
+    gpu_info = i18n("It's pity that you don't have a working graphics card to support your training. You can still train in Google Colab")
     default_batch_size = 1
 gpus = "-".join([i[0] for i in gpu_infos])
 
