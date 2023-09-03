@@ -1,0 +1,5 @@
+['infer/modules/train/extract_feature_print.py', 'mps', '1', '0', '/Users/goutham/RVC-Train/logs/mi-test', 'v2']
+/Users/goutham/RVC-Train/logs/mi-test
+load model(s) from assets/hubert/hubert_base.pt
+move model to mps
+no-feature-todo

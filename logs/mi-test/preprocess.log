@@ -1,0 +1,8 @@
+start preprocess
+['infer/modules/train/preprocess.py', 'E:\\语音音频+标注\\米津玄师\\src', '40000', '8', '/Users/goutham/RVC-Train/logs/mi-test', 'False', '3.7']
+Fail. Traceback (most recent call last):
+  File "infer/modules/train/preprocess.py", line 119, in pipeline_mp_inp_dir
+    for idx, name in enumerate(sorted(list(os.listdir(inp_root))))
+FileNotFoundError: [Errno 2] No such file or directory: 'E:\\语音音频+标注\\米津玄师\\src'
+
+end preprocess
