@@ -12,7 +12,7 @@ now_dir = os.getcwd()
 sys.path.append(now_dir)
 tmp = os.path.join(now_dir, "TEMP")
 shutil.rmtree(tmp, ignore_errors=True)
-shutil.rmtree("%s/runtime/Lib/site-packages/infer_pack" % (now_dir), ignore_errors=True)
+shutil.rmtree("%s/runtime/b/site-packages/infer_pack" % (now_dir), ignore_errors=True)
 os.makedirs(tmp, exist_ok=True)
 os.makedirs(os.path.join(now_dir, "logs"), exist_ok=True)
 os.makedirs(os.path.join(now_dir, "weights"), exist_ok=True)
@@ -1364,7 +1364,7 @@ def download_from_url(url, model):
         shutil.rmtree("unzips")
         return "Success."
     except:
-        return "There's been an error."
+        return "There's been an error. But its still possible that the file can be imported. Please do refresh the list to see changes else Download your model Manually from Step 2."
 def success_message(face):
     return f'{face.name} has been uploaded.', 'None'
 def mouth(size, face, voice, faces):
@@ -1474,10 +1474,10 @@ def zip_downloader(model):
     else:
         return f'./weights/{model}.pth', "Could not find Index file."
 
-with gr.Blocks(theme=gr.themes.Base(), title='Mangio-RVC-Web 💻') as app:
+with gr.Blocks(theme=gr.themes.Base(), title='Easy-GUI') as app:
     with gr.Tabs():
         with gr.TabItem("Inference"):
-            gr.HTML("<h1> Easy GUI v2 by Goutham</h1>")
+            gr.HTML("<h1> Easy-GUI made to convert your trained model with simple GUI. Made changes by GOUTHAM</h1>")
 
             # Inference Preset Row
             # with gr.Row():
@@ -1836,9 +1836,8 @@ with gr.Blocks(theme=gr.themes.Base(), title='Mangio-RVC-Web 💻') as app:
                 gr.Markdown(
                 """
                 Original RVC:https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI
-                Mangio's RVC Fork:https://github.com/Mangio621/Mangio-RVC-Fork
-                ❤️ If you like the EasyGUI, help me keep it.❤️ 
-                https://paypal.me/lesantillan
+                My RVC:https://github.com/spgoutham/RVC-Train.git
+                To train your own voice model without prior knowledge of RVC (Retrieval based Voice Conversion), you can follow the steps outlined in my provided Git repository :)
                 """
                 )
                 
